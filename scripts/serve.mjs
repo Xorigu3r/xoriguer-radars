@@ -4,7 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../www/', import.meta.url));
+// Arrel: www/ per defecte, o la carpeta que es passi com a 2n argument (p. ex. per provar la web de descàrregues).
+const root = process.argv[3] ? normalize(process.argv[3] + '/') : fileURLToPath(new URL('../www/', import.meta.url));
 const port = +process.env.PORT || +process.argv[2] || 8080;
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.svg': 'image/svg+xml', '.png': 'image/png' };
 
