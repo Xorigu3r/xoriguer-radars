@@ -1,0 +1,28 @@
+{
+  "name": "xoriguer-radars",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PWA avisadora de radars oficials (DGT + OSM) amb veu en català",
+  "scripts": {
+    "radars": "node scripts/build-radars.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "test": "node test.mjs",
+    "serve": "node scripts/serve.mjs",
+    "copy:cap": "node -e \"require('fs').copyFileSync('node_modules/@capacitor/core/dist/capacitor.js','www/capacitor.js')\"",
+    "sync": "npm run copy:cap && npx cap sync android",
+    "apk": "npm run sync && powershell -ExecutionPolicy Bypass -File scripts/build-apk.ps1"
+  },
+  "dependencies": {
+    "@capacitor-community/background-geolocation": "^1.3.1",
+    "@capacitor-community/keep-awake": "^8.0.1",
+    "@capacitor-community/text-to-speech": "^8.0.2",
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/local-notifications": "^8.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.0",
+    "sharp": "^0.35.5"
+  }
+}

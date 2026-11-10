@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <!-- Xoriguer Radars: falcó de la casa + tres senyals de velocitat.
+       Mateixa composició que Xoriguer Aparcament/Gasolina (llenç 512, falcó a 36,66 amb 440 d'ample).
+       Paleta: fons #0A0B0E · taronja #FFA82E · taronja fosc #F2650F · crema #F6EFE2 -->
+  <defs>
+    <linearGradient id="anella" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFA82E"/>
+      <stop offset="1" stop-color="#F2650F"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#0A0B0E"/>
+
+  <image href="falco.png" xlink:href="falco.png" x="36" y="66" width="440" height="147"/>
+
+  <!-- línies de velocitat -->
+  <g stroke="#FFA82E" stroke-width="6" stroke-linecap="round">
+    <line x1="24" y1="352" x2="58" y2="352"/>
+    <line x1="12" y1="374" x2="58" y2="374"/>
+    <line x1="30" y1="396" x2="58" y2="396"/>
+  </g>
+
+  <!-- tres senyals de velocitat -->
+  <g font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" text-anchor="middle" fill="#0A0B0E">
+    <circle cx="134" cy="370" r="54" fill="#F6EFE2" stroke="url(#anella)" stroke-width="12"/>
+    <text x="134" y="388" font-size="50">50</text>
+    <circle cx="262" cy="370" r="54" fill="#F6EFE2" stroke="url(#anella)" stroke-width="12"/>
+    <text x="262" y="388" font-size="50">80</text>
+    <circle cx="390" cy="370" r="54" fill="#F6EFE2" stroke="url(#anella)" stroke-width="12"/>
+    <text x="390" y="386" font-size="42" letter-spacing="-2">120</text>
+  </g>
+
+  <!-- terra -->
+  <line x1="40" y1="445" x2="480" y2="445" stroke="#F6EFE2" stroke-opacity=".35" stroke-width="3"/>
+</svg>

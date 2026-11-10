@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Radars</string>
+    <string name="title_activity_main">Xoriguer Radars</string>
+    <string name="package_name">cat.xoriguer.radars</string>
+    <string name="custom_url_scheme">cat.xoriguer.radars</string>
+    <!-- Notificació fixa del GPS en segon pla (@capacitor-community/background-geolocation) -->
+    <string name="capacitor_background_geolocation_notification_channel_name">Vigilància de radars</string>
+    <string name="capacitor_background_geolocation_notification_icon">drawable/ic_stat_radar</string>
+    <string name="capacitor_background_geolocation_notification_color">#FFA82E</string>
+</resources>

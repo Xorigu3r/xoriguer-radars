@@ -1,0 +1,52 @@
+# Cada dia regenera radars.json, en fa commit si ha canviat i publica la PWA a GitHub Pages.
+# Cal activar-ho un cop: Settings → Pages → Source: "GitHub Actions".
+name: Radars i Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node test.mjs
+      - name: Regenera radars.json
+        run: node scripts/build-radars.mjs || echo "No s'han pogut actualitzar; es manté l'anterior"
+      - name: Commit si ha canviat
+        run: |
+          if ! git diff --quiet www/radars.json; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@users.noreply.github.com"
+            git commit -am "Actualitza radars.json"
+            git push
+          fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: www
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

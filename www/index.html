@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0B0E">
+  <meta name="description" content="Xoriguer: avisador de radars oficials per GPS, amb veu en català.">
+  <title>Xoriguer Radars</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="icons/falco.png" alt="">
+      <div>
+        <h1><span class="x">X</span>ORIGUER</h1>
+        <div class="tagline">RADARS</div>
+      </div>
+    </div>
+    <button id="settingsBtn" class="icon" aria-label="Ajustos">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.7 7.7 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.6 7.6 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.7 7.7 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.9c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section id="alert" class="alert idle" aria-live="assertive">
+      <div id="limit" class="limit" hidden></div>
+      <div id="alertTitle" class="alert-title">Cap radar al davant</div>
+      <div id="alertDist" class="alert-dist"></div>
+      <div id="alertInfo" class="alert-info"></div>
+    </section>
+
+    <section class="gauge">
+      <div><span id="speed" class="speed">–</span> <span class="unit">km/h</span></div>
+      <div id="heading" class="heading"></div>
+    </section>
+
+    <p id="status" class="status">Aturat</p>
+    <button id="startBtn" class="start">Engega</button>
+    <p id="dataInfo" class="data-info">Carregant radars…</p>
+    <p class="note web-only">Amb la versió web, la pantalla ha d'estar encesa i l'app al davant. Mantén el mòbil carregant.</p>
+    <p class="note native-only">Avisa també amb la pantalla apagada. Perquè Android no l'aturi: Ajustos del mòbil → Aplicacions → Radars → Bateria → <b>Sense restriccions</b>.</p>
+  </main>
+
+  <dialog id="settings">
+    <h2>Ajustos</h2>
+    <label class="row">Primer avís a <output id="optDistOut"></output>
+      <input id="optDist" type="range" min="300" max="2000" step="100">
+    </label>
+    <label class="row check"><input id="opt-voice" type="checkbox"> Veu</label>
+    <label class="row check"><input id="opt-beep" type="checkbox"> Xiulet</label>
+    <label class="row check"><input id="opt-vibrate" type="checkbox"> Vibració</label>
+    <label class="row check"><input id="opt-wake" type="checkbox"> Mantenir la pantalla encesa</label>
+    <p class="hint">El segon avís és sempre a 200 m.</p>
+    <div class="buttons">
+      <button id="testBtn" type="button">Prova el so</button>
+      <button id="demoBtn" type="button">Demo (simula conduir)</button>
+      <button id="closeSettings" type="button" class="primary">Fet</button>
+    </div>
+    <p class="hint">Dades: DGT (tot Espanya menys Catalunya i País Basc) i OpenStreetMap (Catalunya i País Basc, no oficial). No inclou radars mòbils ni la majoria d'urbans.</p>
+  </dialog>
+
+  <script src="capacitor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+/* Paleta de la casa Xoriguer (com Aparcament i Gasolina): fons gairebé negre, taronja del falcó, crema */
+:root {
+  --night: #0A0B0E;
+  --slate: #15171C;
+  --slate-2: #262A31;
+  --beak: #D9D1C3;
+  --amber: #FFA82E;
+  --orange-dark: #F2650F;
+  --red: #D9341E;
+  --cream: #F6EFE2;
+  --muted: #9A948A;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(120% 50% at 50% 0%, #1A1610 0%, var(--night) 60%) fixed, var(--night);
+  color: var(--cream);
+  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex; flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand img { height: 30px; width: auto; }
+h1 { font-size: 20px; margin: 0; font-weight: 900; font-style: italic; letter-spacing: .03em; line-height: 1.05; }
+h1 .x { color: var(--amber); }
+.tagline { font-size: 11px; font-weight: 700; color: var(--amber); letter-spacing: .32em; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.icon { background: none; border: 0; padding: 8px; color: var(--beak); }
+
+main { flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 0 16px 16px; max-width: 560px; width: 100%; margin: 0 auto; }
+
+.alert {
+  position: relative;
+  border-radius: 22px; padding: 24px 20px; min-height: 210px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  background: var(--slate); border: 1px solid var(--slate-2);
+  transition: background-color .3s, color .3s;
+}
+.alert.warn { background: linear-gradient(135deg, var(--amber), var(--orange-dark)); border-color: var(--amber); color: var(--night); }
+.alert.near { background: var(--red); border-color: var(--red); color: #fff; }
+.alert-title { font-size: 22px; font-weight: 600; }
+.alert-dist { font-size: clamp(56px, 18vw, 96px); font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.alert-info { font-size: 15px; opacity: .85; }
+.alert.idle .alert-title { color: var(--muted); font-weight: 500; }
+.alert.flash { animation: flash .5s 3; }
+@keyframes flash { 50% { filter: brightness(1.35); } }
+
+/* senyal de límit, com els del logo */
+.limit {
+  position: absolute; top: 14px; right: 14px;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--cream); color: var(--night); border: 7px solid var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 21px;
+}
+.limit[hidden] { display: none; }
+.limit.over { animation: flash .5s infinite; }
+
+.gauge { text-align: center; }
+.speed { font-size: 64px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.unit { color: var(--muted); font-size: 18px; }
+.heading { color: var(--muted); font-size: 14px; min-height: 1.4em; }
+
+.status { text-align: center; margin: 0; color: var(--beak); }
+.status.err { color: #FF8A8A; }
+
+.start {
+  border: 0; border-radius: 16px; padding: 18px; font-size: 22px; font-weight: 800;
+  background: var(--amber); color: var(--night);
+  background: linear-gradient(135deg, var(--amber), var(--orange-dark));
+  box-shadow: 0 6px 22px rgba(255, 140, 30, .28);
+}
+body.running .start { background: var(--slate-2); color: var(--cream); box-shadow: none; }
+
+.data-info, .note { margin: 0; text-align: center; color: var(--muted); font-size: 13px; }
+.note b { color: var(--cream); }
+body.native .web-only, body:not(.native) .native-only { display: none; }
+
+dialog {
+  background: var(--slate); color: var(--cream); border: 1px solid var(--slate-2); border-radius: 18px;
+  width: min(92vw, 460px); padding: 20px;
+}
+dialog::backdrop { background: rgba(5, 10, 18, .7); }
+dialog h2 { margin: 0 0 12px; font-size: 20px; }
+.row { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--slate-2); }
+.row.check { flex-direction: row; align-items: center; gap: 12px; }
+.row input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--amber); }
+input[type=range] { width: 100%; accent-color: var(--amber); }
+output { color: var(--amber); font-weight: 700; }
+.hint { color: var(--muted); font-size: 13px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.buttons button { flex: 1 1 auto; border: 0; border-radius: 12px; padding: 12px 14px; background: var(--slate-2); }
+.buttons .primary { background: var(--amber); color: var(--night); font-weight: 800; }
