@@ -22,7 +22,8 @@ if (mode === '--peca') {
   const r = REGIONS.find((x) => x.id === id) || { id, nom: id, pais: '' };
   const bytes = (await stat(target)).size;
   const b = h.bounds.map((n) => Math.round(n * 1e4) / 1e4);
-  console.log(JSON.stringify({ id, pais: r.pais, nom: r.nom, bytes, bounds: b, maxzoom: h.maxZoom, data: new Date().toISOString().slice(0, 10), url: `${BASE}${id}.pmtiles` }));
+  // `sencer`: paquet d'un país sencer (substitueix les regions d'aquell país, excepte les illes que van a part)
+  console.log(JSON.stringify({ id, pais: r.pais, nom: r.nom, ...(r.sencer ? { sencer: true } : {}), bytes, bounds: b, maxzoom: h.maxZoom, data: new Date().toISOString().slice(0, 10), url: `${BASE}${id}.pmtiles` }));
 } else if (mode === '--uneix') {
   let prev = { paquets: [] };
   try { prev = JSON.parse(await readFile(OUT, 'utf8')); } catch {}

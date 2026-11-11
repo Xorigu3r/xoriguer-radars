@@ -1,4 +1,5 @@
 [
+  { "id": "es-espanya", "pais": "Espanya", "nom": "Tota Espanya (península, Balears, Ceuta i Melilla)", "pbf": "europe/spain", "sencer": true },
   { "id": "es-andalusia", "pais": "Espanya", "nom": "Andalusia", "pbf": "europe/spain/andalucia" },
   { "id": "es-arago", "pais": "Espanya", "nom": "Aragó", "pbf": "europe/spain/aragon" },
   { "id": "es-asturies", "pais": "Espanya", "nom": "Astúries", "pbf": "europe/spain/asturias" },

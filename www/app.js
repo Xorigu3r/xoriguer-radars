@@ -480,7 +480,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
 
   // ---------- versió nova ----------
   // L'app no és a Google Play: un cop al dia mira a GitHub si hi ha una Release més nova (etiqueta vX.Y).
-  const APP_VERSION = '1.1';
+  const APP_VERSION = '1.2';
   const RELEASES = 'https://api.github.com/repos/Xorigu3r/xoriguer-radars/releases?per_page=15';
   async function checkNewVersion(manual = false) {
     if (!isNative && !manual) return;   // la web s'actualitza sola
@@ -574,19 +574,37 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
     if (!manifest.paquets.length) { box.innerHTML = ''; $('#pkgInfo').textContent = 'Els paquets encara no estan publicats. Torna-ho a mirar més endavant.'; return; }
     const byCountry = new Map();
     for (const p of manifest.paquets) { if (!byCountry.has(p.pais)) byCountry.set(p.pais, []); byCountry.get(p.pais).push(p); }
+    // Botons de país sencer: un sol fitxer si n'hi ha (Espanya), o totes les regions (França, Itàlia…)
+    const cbox = $('#pkgCountries');
+    cbox.innerHTML = '';
+    for (const [pais, list] of byCountry) {
+      const whole = list.find((p) => p.sencer);
+      const todo = countryTodo(pais);
+      const bytes = todo.reduce((s, p) => s + p.bytes, 0);
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = todo.length ? `${tot(pais).replace(/^t/, "T")} (${mb(bytes)})` : `${pais}: ja ${tot(pais).startsWith("tota") ? "la" : "el"} tens`;
+      b.disabled = !todo.length || !!pkgBusy;
+      b.title = whole ? 'Un sol fitxer' : `${todo.length} paquets un darrere l'altre`;
+      b.onclick = () => downloadCountry(pais);
+      cbox.appendChild(b);
+    }
     box.innerHTML = '';
     for (const [pais, list] of byCountry) {
       const d = document.createElement('details');
       if (pais === 'Espanya') d.open = true;
       const total = list.reduce((s, p) => s + p.bytes, 0);
       d.innerHTML = `<summary>${pais} <small>(${list.length} paquets, ${mb(total)})</small></summary>`;
+      const wholeInst = list.find((p) => p.sencer && inst.has(p.id));
       for (const p of list) {
         const i = inst.get(p.id);
         const nou = i && p.data > i.data;
+        const covered = !i && wholeInst && !p.sencer && coveredBy(p, wholeInst);
         const row = document.createElement('div');
         row.className = 'pkg';
-        row.innerHTML = `<span class="n">${p.nom}<small>${mb(p.bytes)}${i ? ` · descarregat (${i.data})${nou ? ' · hi ha versió nova' : ''}` : ''}</small></span>`;
+        row.innerHTML = `<span class="n">${p.nom}<small>${mb(p.bytes)}${i ? ` · descarregat (${i.data})${nou ? ' · hi ha versió nova' : ''}` : ''}${covered ? ' · inclòs al paquet sencer' : ''}</small></span>`;
         const btn = document.createElement('button');
+        if (covered) { row.appendChild(btn); btn.textContent = 'Inclòs'; btn.disabled = true; d.appendChild(row); continue; }
         if (pkgBusy === `${p.id}.pmtiles`) { btn.textContent = 'Atura'; btn.onclick = () => Mapes.atura({ fitxer: pkgBusy }); }
         else if (!i || nou) { btn.textContent = nou ? 'Actualitza' : 'Descarrega'; btn.className = 'get'; btn.onclick = () => downloadPackage(p); }
         else { btn.textContent = 'Esborra'; btn.onclick = () => removePackage(p); }
@@ -610,7 +628,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
     pkgBusy = `${p.id}.pmtiles`;
     renderPackages();
     try {
-      await Mapes.descarrega({ url: p.url, fitxer: pkgBusy });
+      await Mapes.descarrega({ url: p.url, fitxer: pkgBusy, versio: p.data });
       saveInstalled([...installed().filter((x) => x.id !== p.id), { id: p.id, fitxer: pkgBusy, bounds: p.bounds, bytes: p.bytes, data: p.data }]);
       $('#pkgInfo').textContent = `${p.nom}: descarregat.`;
       applyPackages();
@@ -630,12 +648,27 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
     applyPackages();
     renderPackages();
   }
-  async function downloadSpain() {
-    const inst = new Set(installed().map((p) => p.id));
-    const todo = manifest.paquets.filter((p) => p.pais === 'Espanya' && !inst.has(p.id));
-    if (!todo.length) { $('#pkgInfo').textContent = manifest.paquets.length ? 'Ja tens tota Espanya.' : 'Els paquets encara no estan publicats.'; return; }
+  // «Tota Espanya» però «Tot Portugal»
+  const tot = (pais) => (/^(Espanya|França|Itàlia|Andorra)$/.test(pais) ? 'tota' : 'tot') + ' ' + pais;
+  /** Una regió és dins del paquet sencer si el seu centre hi cau (les Canàries, per exemple, no). */
+  function coveredBy(p, whole) {
+    const [w, s, e, n] = whole.bounds, cx = (p.bounds[0] + p.bounds[2]) / 2, cy = (p.bounds[1] + p.bounds[3]) / 2;
+    return cx >= w && cx <= e && cy >= s && cy <= n;
+  }
+  /** Què cal baixar per tenir un país sencer: el paquet sencer (si n'hi ha) + el que no hi càpiga; si no, totes les regions. */
+  function countryTodo(pais) {
+    const inst = new Map(installed().map((p) => [p.id, p]));
+    const list = manifest.paquets.filter((p) => p.pais === pais);
+    const whole = list.find((p) => p.sencer);
+    const want = whole ? [whole, ...list.filter((p) => !p.sencer && !coveredBy(p, whole))] : list;
+    return want.filter((p) => !inst.has(p.id) || p.data > inst.get(p.id).data);
+  }
+  async function downloadCountry(pais) {
+    const todo = countryTodo(pais);
+    if (!todo.length) { $("#pkgInfo").textContent = `Ja tens ${tot(pais)}.`; return; }
     const total = todo.reduce((s, p) => s + p.bytes, 0);
-    if (!confirm(`Descarregar ${todo.length} paquets (${mb(total)})? Fes-ho amb WiFi i el mòbil carregant: pot trigar una bona estona.`)) return;
+    const desc = todo.length === 1 ? `un fitxer de ${mb(total)}` : `${todo.length} paquets (${mb(total)} en total)`;
+    if (!confirm(`Descarregar el mapa de ${tot(pais)}: ${desc}?\n\nFes-ho amb WiFi i el mòbil carregant: pot trigar una bona estona. Si es talla, en tornar-ho a provar continua des d'on era.`)) return;
     for (const p of todo) { if (!(await downloadPackage(p, true))) break; }
   }
 
@@ -1019,7 +1052,6 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
     $('#verInfo').textContent = `Versió instal·lada: v${APP_VERSION}.`;
     $('#offBtn').onclick = downloadMap;
     $('#routeBtn').onclick = downloadRoute;
-    $('#pkgSpain').onclick = downloadSpain;
     $('#settingsBtn').addEventListener('click', () => { if (isNative) loadManifest(); });
     $('#offClear').onclick = clearMap;
     $('#settingsBtn').addEventListener('click', showSaved);

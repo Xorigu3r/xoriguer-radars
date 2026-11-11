@@ -61,11 +61,20 @@ public class MapesPlugin extends Plugin {
             File part = null;
             try {
                 File desti = fitxer(nom);
-                part = new File(desti.getPath() + ".part");
-                HttpURLConnection con = obre(url);
-                long total = con.getContentLengthLong();
-                long fet = 0, darrerAvis = 0;
-                try (InputStream in = con.getInputStream(); FileOutputStream out = new FileOutputStream(part)) {
+                // El tros a mitges porta la data del paquet: si el paquet s'ha actualitzat, no es barregen.
+                String versio = call.getString("versio", "x").replaceAll("[^A-Za-z0-9-]", "");
+                part = new File(desti.getPath() + "." + versio + ".part");
+                File[] vells = dir().listFiles((d, n) -> n.startsWith(nom + ".") && n.endsWith(".part"));
+                if (vells != null) for (File v : vells) if (!v.getName().equals(part.getName())) v.delete();
+                // Si una descàrrega anterior va quedar a mitges, continua des d'on era (Range).
+                long jaTenim = part.exists() ? part.length() : 0;
+                HttpURLConnection con = obre(url, jaTenim);
+                boolean continua = jaTenim > 0 && con.getResponseCode() == 206;
+                if (!continua) jaTenim = 0;
+                long resta = con.getContentLengthLong();
+                long total = resta >= 0 ? resta + jaTenim : -1;
+                long fet = jaTenim, darrerAvis = 0;
+                try (InputStream in = con.getInputStream(); FileOutputStream out = new FileOutputStream(part, continua)) {
                     byte[] buf = new byte[256 * 1024];
                     int n;
                     while ((n = in.read(buf)) > 0) {
@@ -90,7 +99,8 @@ public class MapesPlugin extends Plugin {
                 r.put("fitxer", nom); r.put("bytes", fet);
                 call.resolve(r);
             } catch (Exception e) {
-                if (part != null) part.delete();
+                // El tros baixat es conserva (.part) perquè el pròxim intent continuï; si l'usuari l'atura, s'esborra.
+                if (part != null && "aturat".equals(e.getMessage())) part.delete();
                 call.reject("aturat".equals(e.getMessage()) ? "aturat" : ("Error de descàrrega: " + e.getMessage()));
             } finally {
                 aturar.remove(nom);
@@ -99,13 +109,14 @@ public class MapesPlugin extends Plugin {
     }
 
     /** Segueix redireccions (GitHub → servidor de fitxers) a mà, també entre dominis. */
-    private HttpURLConnection obre(String url) throws IOException {
+    private HttpURLConnection obre(String url, long desDe) throws IOException {
         for (int i = 0; i < 6; i++) {
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setInstanceFollowRedirects(false);
             con.setConnectTimeout(20000);
             con.setReadTimeout(60000);
             con.setRequestProperty("User-Agent", "XoriguerRadars");
+            if (desDe > 0) con.setRequestProperty("Range", "bytes=" + desDe + "-");
             int code = con.getResponseCode();
             if (code >= 300 && code < 400) {
                 String loc = con.getHeaderField("Location");
@@ -114,7 +125,9 @@ public class MapesPlugin extends Plugin {
                 url = new URL(new URL(url), loc).toString();
                 continue;
             }
-            if (code != 200) { con.disconnect(); throw new IOException("HTTP " + code); }
+            // 416: el tros desat no encaixa (fitxer canviat al servidor): torna a començar.
+            if (code == 416 && desDe > 0) { con.disconnect(); return obre(url, 0); }
+            if (code != 200 && code != 206) { con.disconnect(); throw new IOException("HTTP " + code); }
             return con;
         }
         throw new IOException("Massa redireccions");
