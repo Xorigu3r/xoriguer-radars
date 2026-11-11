@@ -1,0 +1,119 @@
+# Paquets de mapa per regions (fitxers .pmtiles) per fer servir el mapa sense connexió a l'app.
+# Es generen amb Planetiler (esquema OpenMapTiles, el mateix que OpenFreeMap, així l'estil hi encaixa)
+# a partir dels extractes d'OpenStreetMap de Geofabrik, i es pengen a la Release "mapes".
+# Cada mes s'actualitzen. També es pot llançar a mà, per a totes les regions o només algunes.
+name: Paquets de mapa
+
+on:
+  schedule:
+    - cron: '0 3 2 * *'          # el dia 2 de cada mes
+  workflow_dispatch:
+    inputs:
+      regions:
+        description: "Ids separats per comes (buit = totes). P. ex.: es-catalunya,ad-andorra"
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: mapes
+  cancel-in-progress: false
+
+env:
+  PLANETILER: v0.10.2
+
+jobs:
+  llista:
+    runs-on: ubuntu-latest
+    outputs:
+      matriu: ${{ steps.m.outputs.matriu }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: m
+        run: |
+          node -e '
+            const all = require("./scripts/mapes-regions.json");
+            const want = (process.env.REGIONS || "").split(",").map(s => s.trim()).filter(Boolean);
+            const sel = want.length ? all.filter(r => want.includes(r.id)) : all;
+            console.log("matriu=" + JSON.stringify(sel.map(r => ({ id: r.id, pbf: r.pbf }))));
+          ' >> "$GITHUB_OUTPUT"
+        env:
+          REGIONS: ${{ github.event.inputs.regions }}
+      - name: Crea la Release "mapes" si no existeix
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view mapes >/dev/null 2>&1 || gh release create mapes --prerelease --title "Paquets de mapa" \
+            --notes "Mapes per regions per a Xoriguer Radars (fitxers .pmtiles, es descarreguen des de l'app). Dades © OpenStreetMap (ODbL), esquema OpenMapTiles."
+
+  paquet:
+    needs: llista
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6           # per no carregar massa Geofabrik
+      matrix:
+        regio: ${{ fromJSON(needs.llista.outputs.matriu) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Fonts comunes (mar, costes, Natural Earth) en memòria cau
+        uses: actions/cache@v4
+        with:
+          path: data/sources
+          key: planetiler-fonts-v1
+      - name: Genera el paquet
+        run: |
+          curl -sL -o planetiler.jar "https://github.com/onthegomap/planetiler/releases/download/${PLANETILER}/planetiler.jar"
+          mkdir -p out
+          java -Xmx12g -jar planetiler.jar --download \
+            --osm-url="https://download.geofabrik.de/${{ matrix.regio.pbf }}-latest.osm.pbf" \
+            --output="out/${{ matrix.regio.id }}.pmtiles" --maxzoom=14 --force
+          ls -la out
+      - name: Puja'l a la Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload mapes "out/${{ matrix.regio.id }}.pmtiles" --clobber
+      - name: Fitxa del paquet
+        run: |
+          mkdir -p peces
+          node scripts/mapes-manifest.mjs --peca "out/${{ matrix.regio.id }}.pmtiles" > "peces/${{ matrix.regio.id }}.json"
+          cat "peces/${{ matrix.regio.id }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peca-${{ matrix.regio.id }}
+          path: peces/${{ matrix.regio.id }}.json
+
+  llista-final:
+    needs: paquet
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: peca-*
+          path: peces
+          merge-multiple: true
+      - name: Actualitza www/mapes.json
+        run: |
+          node scripts/mapes-manifest.mjs --uneix peces
+          if ! git diff --quiet www/mapes.json; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@users.noreply.github.com"
+            git add www/mapes.json
+            git commit -m "Actualitza la llista de paquets de mapa"
+            git pull --rebase
+            git push
+          fi
+      - name: Torna a publicar la web (perquè l'app vegi la llista nova)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run radars-pages.yml

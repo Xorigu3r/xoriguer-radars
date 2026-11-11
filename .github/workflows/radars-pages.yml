@@ -21,6 +21,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120          # els límits de velocitat (Overpass) poden trigar
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,13 +29,16 @@ jobs:
           node-version: 22
       - run: node test.mjs
       - name: Regenera radars.json
+        timeout-minutes: 90
         run: node scripts/build-radars.mjs || echo "No s'han pogut actualitzar; es manté l'anterior"
       - name: Commit si ha canviat
         run: |
           if ! git diff --quiet www/radars.json; then
             git config user.name "github-actions"
             git config user.email "github-actions@users.noreply.github.com"
-            git commit -am "Actualitza radars.json"
+            git add www/radars.json
+            git commit -m "Actualitza radars.json"
+            git pull --rebase
             git push
           fi
       - uses: actions/upload-pages-artifact@v3

@@ -78,6 +78,83 @@ t('parseOverpass', () => {
   const r = parseOverpass({ elements: [{ type: 'node', id: 1, lat: 41, lon: 2, tags: { maxspeed: '80', direction: '90' } }] });
   assert.deepEqual([r[0].v, r[0].d, r[0].s], [80, 90, 'osm']);
 });
+t('alertText: «Vas massa ràpid» es pot desactivar', () => {
+  assert.equal(L.alertText({ t: 'fix', v: 80 }, 200, 100, false), 'Radar a 200 metres. Límit 80.');
+});
+t('filterRadars: trams i OSM opcionals', () => {
+  const l = [{ t: 'fix', s: 'dgt' }, { t: 'tram', s: 'dgt' }, { t: 'fix', s: 'osm' }];
+  assert.equal(L.filterRadars(l, { trams: true, osm: true }).length, 3);
+  assert.equal(L.filterRadars(l, { trams: false, osm: true }).length, 2);
+  assert.equal(L.filterRadars(l, { trams: true, osm: false }).length, 2);
+  assert.equal(L.filterRadars(l, { trams: false, osm: false }).length, 1);
+});
+t('newestData: es queda la còpia més nova i ignora les buides', () => {
+  const a = { generated: '2026-11-10T04:00:00Z', radars: [1] }, b = { generated: '2026-11-11T04:00:00Z', radars: [1] };
+  assert.equal(L.newestData(a, b), b);
+  assert.equal(L.newestData(b, a), b);
+  assert.equal(L.newestData(a, { generated: '2099', radars: [] }, null), a);
+  assert.equal(L.newestData(null, undefined), null);
+});
+
+t('alongPath i trimAround (demo per carretera)', () => {
+  // Camí en forma de L: 1 km cap al nord i 1 km cap a l'est
+  const a = bcn, b = L.destination(a, 0, 1000), c = L.destination(b, 90, 1000);
+  const path = [a, b, c], acc = L.pathLengths(path);
+  assert.ok(Math.abs(acc[2] - 2000) < 2);
+  const p = L.alongPath(path, acc, 500);
+  assert.ok(Math.abs(L.distance(a, p) - 500) < 2 && L.angleDiff(p.brg, 0) < 1);
+  const q = L.alongPath(path, acc, 1500);
+  assert.ok(L.angleDiff(q.brg, 90) < 1 && !q.end);
+  assert.ok(L.alongPath(path, acc, 9999).end);
+  // Retallar al voltant de b: 600 m abans i 300 m després
+  const dense = [];
+  for (let i = 0; i <= 20; i++) dense.push(L.alongPath(path, acc, i * 100));
+  const t2 = L.trimAround(dense, b, 600, 300);
+  const tl = L.pathLengths(t2.path);
+  assert.ok(t2.gap < 2 && tl[tl.length - 1] >= 800 && tl[tl.length - 1] <= 900, tl[tl.length - 1]);
+});
+
+const B = await import('./scripts/build-radars.mjs');
+t('SCT: UTM → GPS i línies del radars.txt', () => {
+  // A-2 PK 445,35 (Alcarràs/Lleida): ha de caure a prop de Lleida
+  const p = B.utmToLatLon(288075.4643, 4601625.063);
+  assert.ok(p.lat > 41.5 && p.lat < 41.6 && p.lon > 0.4 && p.lon < 0.5, JSON.stringify(p));
+  const r = B.parseSct('Via  PK  Velocitat X Y\nA-2         445,35      120         288075,4643 4601625,063 \nN-340       1074-1079   90          296368,2751 4502502,5464\nN-340       1079-1074   90          295760,707  4506827,5578\n');
+  assert.equal(r.length, 3);
+  assert.deepEqual([r[0].t, r[0].v, r[0].s, r[0].c], ['fix', 120, 'sct', 'ES']);
+  assert.equal(r[1].t, 'tram');
+  assert.equal(r[1].g, r[2].g);   // els dos sentits del mateix tram s'agrupen
+});
+t('França: CSV oficial (tipus i límit)', () => {
+  const r = B.parseFrance('Numéro de radar;Type de radar;Date de mise en service;VMA ;Latitude; Longitude\n12001;ETD;31/10/2011 00:00;70;+45.361;+4.2526\n9;ETFR;01/01/2012;50;+45.1;+4.1\n10;ETVM;01/01/2012;110;+45.2;+4.3\n');
+  assert.equal(r.length, 2);          // el de semàfor (ETFR) queda fora
+  assert.deepEqual([r[0].t, r[0].v, r[0].c], ['fix', 70, 'FR']);
+  assert.equal(r[1].t, 'tram');
+});
+t('mode zona (França): sempre entre 600 i 2000 m, i fix per a cada radar', () => {
+  for (let i = 0; i < 200; i++) { const d = L.zoneDistance({ id: `fr-${i}` }); assert.ok(d >= 600 && d <= 2000); }
+  assert.equal(L.zoneDistance({ id: 'fr-7' }), L.zoneDistance({ id: 'fr-7' }));
+  assert.ok(L.isZone({ c: 'FR' }) && !L.isZone({ c: 'ES' }));
+});
+t('trams: grups de dos extrems i velocitat mitjana', () => {
+  const g = L.tramGroups([{ t: 'tram', g: 'a' }, { t: 'tram', g: 'a' }, { t: 'tram', g: 'b' }, { t: 'fix', g: 'c' }]);
+  assert.deepEqual([...g.keys()], ['a']);
+  assert.equal(Math.round(L.avgKmh(5000, 150000)), 120);   // 5 km en 2 min 30 s = 120 km/h
+});
+t('versions', () => {
+  assert.equal(L.compareVersions('v1.10', '1.9'), 1);
+  assert.equal(L.compareVersions('v1.1', '1.1'), 0);
+  assert.equal(L.compareVersions('v1.0', '1.1'), -1);
+});
+t('incidències: DATEX II', () => {
+  const x = `<sit:situationRecord xsi:type="sit:GeneralObstruction" id="1"><com:overallEndTime>2099-01-01T00:00:00Z</com:overallEndTime><sit:causeType>accident</sit:causeType><loc:roadName>AP-7</loc:roadName><loc:latitude>41.5</loc:latitude><loc:longitude>2.1</loc:longitude></sit:situationRecord>
+  <sit:situationRecord xsi:type="sit:AbnormalTraffic" id="2"><loc:latitude>41.6</loc:latitude><loc:longitude>2.2</loc:longitude></sit:situationRecord>
+  <sit:situationRecord xsi:type="sit:GeneralObstruction" id="3"><com:overallEndTime>2001-01-01T00:00:00Z</com:overallEndTime><loc:latitude>41</loc:latitude><loc:longitude>2</loc:longitude></sit:situationRecord>`;
+  const r = L.parseIncidents(x);
+  assert.equal(r.length, 2);   // la caducada no hi és
+  assert.deepEqual([r[0].kind, r[0].road, r[1].kind], ['accident', 'AP-7', 'retencio']);
+  assert.equal(L.incidentText(r[0], 1000), 'Accident a 1 quilòmetre, AP 7.');
+});
 
 // Simulació: conduir a 108 km/h cap a un radar i comprovar on avisa.
 t('simulació: avisa un cop a ~1 km i un altre a ~200 m', () => {

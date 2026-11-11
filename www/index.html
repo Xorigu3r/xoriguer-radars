@@ -25,42 +25,120 @@
     </button>
   </header>
 
+  <!-- Mapa (opcional): ocupa el fons; la resta de la pantalla hi va a sobre -->
+  <div id="map" class="map" hidden></div>
+  <p id="mapMsg" class="map-msg" hidden></p>
+
   <main>
+    <p id="newVersion" class="banner" hidden><span id="newVersionText"></span> <a id="newVersionLink" href="#" target="_blank" rel="noopener">Descarrega-la</a></p>
     <section id="alert" class="alert idle" aria-live="assertive">
       <div id="limit" class="limit" hidden></div>
       <div id="alertTitle" class="alert-title">Cap radar al davant</div>
       <div id="alertDist" class="alert-dist"></div>
       <div id="alertInfo" class="alert-info"></div>
     </section>
+    <div id="tramBox" class="tram-box" hidden>Tram · mitjana <b><span id="tramAvg">–</span><span id="tramLimit"></span></b> km/h</div>
+    <div id="incBox" class="inc-box" hidden>⚠️ <span id="incText"></span></div>
 
-    <section class="gauge">
+    <section id="gauge" class="gauge">
       <div><span id="speed" class="speed">–</span> <span class="unit">km/h</span></div>
       <div id="heading" class="heading"></div>
     </section>
 
-    <p id="status" class="status">Aturat</p>
-    <button id="startBtn" class="start">Engega</button>
-    <p id="dataInfo" class="data-info">Carregant radars…</p>
-    <p class="note web-only">Amb la versió web, la pantalla ha d'estar encesa i l'app al davant. Mantén el mòbil carregant.</p>
-    <p class="note native-only">Avisa també amb la pantalla apagada. Perquè Android no l'aturi: Ajustos del mòbil → Aplicacions → Radars → Bateria → <b>Sense restriccions</b>.</p>
+    <div class="bottom">
+      <p id="status" class="status">Aturat</p>
+      <button id="startBtn" class="start">Engega</button>
+      <p id="dataInfo" class="data-info">Carregant radars…</p>
+      <p class="note web-only">Amb la versió web, la pantalla ha d'estar encesa i l'app al davant. Mantén el mòbil carregant.</p>
+      <p class="note native-only">Avisa també amb la pantalla apagada. Perquè Android no l'aturi: Ajustos del mòbil → Aplicacions → Radars → Bateria → <b>Sense restriccions</b>.</p>
+    </div>
   </main>
 
   <dialog id="settings">
     <h2>Ajustos</h2>
+
+    <h3>Avisos</h3>
     <label class="row">Primer avís a <output id="optDistOut"></output>
       <input id="optDist" type="range" min="300" max="2000" step="100">
     </label>
+    <label class="row">Segon avís a <output id="optDist2Out"></output>
+      <input id="optDist2" type="range" min="100" max="500" step="50">
+    </label>
+    <label class="row check"><input id="opt-trams" type="checkbox"> Trams de velocitat mitjana</label>
+    <label class="row check"><input id="opt-osm" type="checkbox"> <span>Radars de Catalunya i País Basc <small>(OpenStreetMap, no oficials)</small></span></label>
+    <label class="row check"><input id="opt-overspeed" type="checkbox"> Dir «Vas massa ràpid» si superes el límit</label>
+    <label class="row check"><input id="opt-tramavg" type="checkbox"> <span>Velocitat mitjana als trams <small>(t'avisa si la mitjana passa del límit)</small></span></label>
+    <p class="hint">Països: Espanya (DGT i Servei Català de Trànsit, oficials), França (oficials), Portugal, Andorra i Itàlia (OpenStreetMap). A <b>França</b> la llei només permet avisar de «zona de control», sense dir on és el radar. A <b>Alemanya i Suïssa</b> fer servir avisadors conduint és il·legal: no hi ha avisos.</p>
+
+    <h3 class="native-only">Trànsit</h3>
+    <label class="row check native-only"><input id="opt-incidents" type="checkbox"> <span>Incidències de trànsit <small>(accidents, retencions, talls; DGT i SCT; ~2 MB/hora)</small></span></label>
+    <label class="row check native-only"><input id="opt-roadworks" type="checkbox"> <span>Incloure les obres <small>(n'hi ha moltes)</small></span></label>
+    <p id="incInfo" class="hint native-only"></p>
+
+    <h3>So</h3>
     <label class="row check"><input id="opt-voice" type="checkbox"> Veu</label>
     <label class="row check"><input id="opt-beep" type="checkbox"> Xiulet</label>
     <label class="row check"><input id="opt-vibrate" type="checkbox"> Vibració</label>
+    <label class="row native-only">Per on surt el so
+      <select id="optOut">
+        <option value="auto">Automàtic (Bluetooth si n'hi ha; si no, mòbil)</option>
+        <option value="trucada">Bluetooth del cotxe, com una trucada</option>
+        <option value="altaveu">Sempre l'altaveu del mòbil</option>
+        <option value="multimedia">Multimèdia (com la música)</option>
+      </select>
+    </label>
+    <p id="outInfo" class="hint native-only"></p>
+    <p class="hint native-only">Com una trucada: el cotxe abaixa la ràdio mentre parla i després la torna a posar.</p>
+
+    <h3>Pantalla i mapa</h3>
+    <label class="row check"><input id="opt-map" type="checkbox"> Mostrar el mapa</label>
+    <p class="hint warn-hint">⚠️ El mapa fa servir <b>dades mòbils</b>: per autopista, uns <b>5–6 MB per hora</b>; dins d'una ciutat gran, fins a <b>1,5 MB per quilòmetre</b> el primer cop. Els trajectes repetits gasten molt menys (el mapa queda desat al mòbil). També gasta més bateria, perquè vol la pantalla encesa. Els avisos funcionen igual sense mapa.</p>
+    <div class="row">
+      <span>Mapa sense connexió</span>
+      <p class="hint">Descarrega el mapa del voltant d'on ets (millor amb WiFi). Després s'obre sense cobertura i no gasta dades en aquella zona. Tot el que ja has vist també queda desat.</p>
+      <select id="offRadius">
+        <option value="25">25 km al voltant (5–40 MB)</option>
+        <option value="50" selected>50 km al voltant (10–80 MB)</option>
+        <option value="100">100 km al voltant (40–250 MB)</option>
+      </select>
+      <div class="buttons">
+        <button id="offBtn" type="button">Descarrega el mapa de la zona</button>
+        <button id="offClear" type="button">Esborra el mapa desat</button>
+      </div>
+      <p id="offInfo" class="hint"></p>
+    </div>
+    <div class="row">
+      <span>Mapa d'una ruta</span>
+      <p class="hint">Abans d'un viatge, descarrega el mapa de 3 km a cada costat de la ruta, des d'on ets fins on vas.</p>
+      <input id="routeTo" type="text" placeholder="On vas? (p. ex. Madrid, Perpinyà…)" autocomplete="off">
+      <div class="buttons"><button id="routeBtn" type="button">Descarrega el mapa de la ruta</button></div>
+      <p id="routeInfo" class="hint"></p>
+    </div>
+    <div class="row native-only">
+      <span>Paquets de mapa per regions</span>
+      <p class="hint">Mapes complets per comunitats i països, per fer servir el mapa sense connexió ni dades. Descarrega'ls amb WiFi. S'actualitzen cada mes.</p>
+      <div class="buttons"><button id="pkgSpain" type="button">Descarrega tota Espanya</button></div>
+      <p id="pkgInfo" class="hint"></p>
+      <div id="pkgList" class="pkg-list"></div>
+    </div>
+    <label class="row check"><input id="opt-speed" type="checkbox"> Mostrar la velocitat</label>
     <label class="row check"><input id="opt-wake" type="checkbox"> Mantenir la pantalla encesa</label>
-    <p class="hint">El segon avís és sempre a 200 m.</p>
+
+    <h3>Dades dels radars</h3>
+    <label class="row check"><input id="opt-update" type="checkbox"> <span>Actualitzar els radars d'internet <small>(un cop al dia, ~170 kB)</small></span></label>
+    <p id="updInfo" class="hint"></p>
+
+    <h3 class="native-only">App</h3>
+    <p id="verInfo" class="hint native-only"></p>
+    <div class="buttons native-only"><button id="verBtn" type="button">Comprova si hi ha versió nova</button></div>
+
     <div class="buttons">
       <button id="testBtn" type="button">Prova el so</button>
       <button id="demoBtn" type="button">Demo (simula conduir)</button>
+      <button id="updBtn" type="button">Actualitza els radars ara</button>
       <button id="closeSettings" type="button" class="primary">Fet</button>
     </div>
-    <p class="hint">Dades: DGT (tot Espanya menys Catalunya i País Basc) i OpenStreetMap (Catalunya i País Basc, no oficial). No inclou radars mòbils ni la majoria d'urbans.</p>
+    <p class="hint">Dades: DGT (tot Espanya menys Catalunya i País Basc) i OpenStreetMap (Catalunya i País Basc, no oficial). No inclou radars mòbils ni la majoria d'urbans. Mapa: OpenFreeMap · © OpenStreetMap.</p>
   </dialog>
 
   <script src="capacitor.js"></script>

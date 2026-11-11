@@ -88,8 +88,65 @@ dialog h2 { margin: 0 0 12px; font-size: 20px; }
 .row.check { flex-direction: row; align-items: center; gap: 12px; }
 .row input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--amber); }
 input[type=range] { width: 100%; accent-color: var(--amber); }
+select { font: inherit; color: var(--cream); background: var(--slate-2); border: 1px solid #3A3F48; border-radius: 10px; padding: 10px; width: 100%; }
 output { color: var(--amber); font-weight: 700; }
 .hint { color: var(--muted); font-size: 13px; }
 .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .buttons button { flex: 1 1 auto; border: 0; border-radius: 12px; padding: 12px 14px; background: var(--slate-2); }
 .buttons .primary { background: var(--amber); color: var(--night); font-weight: 800; }
+
+/* ---------- ajustos per seccions ---------- */
+dialog h3 { margin: 18px 0 2px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
+dialog small { color: var(--muted); }
+.warn-hint { background: rgba(255, 168, 46, .10); border: 1px solid rgba(255, 168, 46, .35); border-radius: 10px; padding: 8px 10px; }
+.bottom { display: flex; flex-direction: column; gap: 16px; }
+body.no-speed .gauge { display: none; }
+
+/* ---------- mode mapa ---------- */
+/* #map (id) perquè guanyi el `position: relative` de maplibre-gl.css */
+#map.map { position: fixed; inset: 0; z-index: 0; background: var(--night); }
+#map.map[hidden] { display: none; }
+.map-msg { position: fixed; left: 16px; right: 16px; top: 50%; z-index: 2; text-align: center; color: var(--cream);
+  background: rgba(10, 11, 14, .85); border-radius: 12px; padding: 10px; margin: 0; }
+.map-msg[hidden] { display: none; }
+.car-marker { filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6)); }
+body.map-on header { position: relative; z-index: 2; background: linear-gradient(var(--night) 60%, transparent); }
+body.map-on main { position: relative; z-index: 1; pointer-events: none; justify-content: space-between; }
+body.map-on main > * { pointer-events: auto; }
+body.map-on .alert { min-height: 0; padding: 14px 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, .5); }
+body.map-on .alert.idle { background: rgba(21, 23, 28, .88); padding: 10px 16px; }
+body.map-on .alert.idle .alert-title { font-size: 16px; }
+body.map-on .alert-dist { font-size: clamp(44px, 14vw, 72px); }
+body.map-on .limit { width: 50px; height: 50px; font-size: 18px; border-width: 6px; top: 10px; right: 10px; }
+body.map-on .gauge { position: fixed; left: 16px; bottom: calc(110px + env(safe-area-inset-bottom)); z-index: 1;
+  background: rgba(10, 11, 14, .88); border: 1px solid var(--slate-2); border-radius: 16px; padding: 4px 14px 6px; }
+body.map-on .speed { font-size: 40px; }
+body.map-on .heading { display: none; }
+body.map-on .bottom { margin-top: auto; gap: 8px; }
+body.map-on .bottom .status { background: rgba(10, 11, 14, .8); border-radius: 10px; padding: 4px 8px; align-self: center; }
+body.map-on .data-info, body.map-on .note { display: none; }
+body.map-on .start { padding: 14px; font-size: 20px; }
+.maplibregl-ctrl-attrib { font-size: 10px; }
+
+/* ---------- versió nova, tram i incidències ---------- */
+.banner { margin: 0; padding: 10px 14px; border-radius: 12px; background: rgba(255, 168, 46, .15); border: 1px solid var(--amber); font-size: 14px; }
+.banner[hidden] { display: none; }
+.banner a { color: var(--amber); font-weight: 700; }
+.tram-box, .inc-box { border-radius: 14px; padding: 10px 14px; font-size: 16px; background: var(--slate); border: 1px solid var(--slate-2); text-align: center; }
+.tram-box[hidden], .inc-box[hidden] { display: none; }
+.tram-box b { font-size: 22px; font-variant-numeric: tabular-nums; }
+.tram-box.over { background: var(--red); border-color: var(--red); color: #fff; }
+.inc-box { border-color: rgba(255, 168, 46, .6); }
+.inc-box[data-kind="accident"], .inc-box[data-kind="tall"] { border-color: var(--red); }
+body.map-on .tram-box, body.map-on .inc-box { background: rgba(21, 23, 28, .9); }
+body.map-on .tram-box.over { background: var(--red); }
+
+/* ---------- paquets de mapa i ruta ---------- */
+input[type=text] { font: inherit; color: var(--cream); background: var(--slate-2); border: 1px solid #3A3F48; border-radius: 10px; padding: 10px; width: 100%; }
+.pkg-list details { border-top: 1px solid var(--slate-2); padding: 6px 0; }
+.pkg-list summary { cursor: pointer; font-weight: 700; color: var(--amber); padding: 4px 0; }
+.pkg { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; }
+.pkg .n { flex: 1; }
+.pkg small { display: block; color: var(--muted); }
+.pkg button { border: 0; border-radius: 10px; padding: 8px 10px; background: var(--slate-2); font-size: 13px; }
+.pkg button.get { background: var(--amber); color: var(--night); font-weight: 700; }

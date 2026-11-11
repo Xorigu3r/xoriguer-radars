@@ -1,6 +1,6 @@
 // Els fitxers s'actualitzen sols en segon pla; canvia la versió només si vols forçar-ho tot de cop.
-const VERSION = 'v4';
-const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'capacitor.js', 'manifest.webmanifest', 'icons/logo.svg', 'icons/falco.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
+const VERSION = 'v5';
+const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'map.js', 'capacitor.js', 'manifest.webmanifest', 'icons/logo.svg', 'icons/falco.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll([...SHELL, 'radars.json'])).then(() => self.skipWaiting()));
