@@ -1,4 +1,7 @@
-# Cada dia regenera radars.json, en fa commit si ha canviat i publica la PWA a GitHub Pages.
+# Publica la PWA (www/) a GitHub Pages i, un cop al dia, regenera radars.json.
+#  - push a main o «radars: no» → només publica (1–2 minuts).
+#  - cada dia (o a mà amb «radars: sí») → primer regenera radars.json (amb pressupost de temps) i després publica.
+# Abans tot anava junt i, quan Overpass anava lent, la web es quedava una hora sense publicar.
 # Cal activar-ho un cop: Settings → Pages → Source: "GitHub Actions".
 name: Radars i Pages
 
@@ -8,20 +11,25 @@ on:
   schedule:
     - cron: '30 4 * * *'
   workflow_dispatch:
+    inputs:
+      radars:
+        description: 'Regenerar també radars.json (lent)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
-  build:
+  radars:
+    if: github.event_name == 'schedule' || inputs.radars == true
     runs-on: ubuntu-latest
-    timeout-minutes: 120          # els límits de velocitat (Overpass) poden trigar
+    timeout-minutes: 60
+    concurrency:
+      group: radars
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,7 +37,9 @@ jobs:
           node-version: 22
       - run: node test.mjs
       - name: Regenera radars.json
-        timeout-minutes: 90
+        timeout-minutes: 45
+        env:
+          LIMITS_MINUTES: '20'
         run: node scripts/build-radars.mjs || echo "No s'han pogut actualitzar; es manté l'anterior"
       - name: Commit si ha canviat
         run: |
@@ -41,16 +51,25 @@ jobs:
             git pull --rebase
             git push
           fi
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: www
 
-  deploy:
-    needs: build
+  publica:
+    needs: radars
+    # Es publica encara que la part dels radars no s'hagi fet o hagi fallat.
+    if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main          # l'última versió (amb el radars.json o el mapes.json que s'acabin de pujar)
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: www
       - id: deployment
         uses: actions/deploy-pages@v4

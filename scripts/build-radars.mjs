@@ -183,12 +183,14 @@ async function getText(url, opts = {}) {
   if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
   return opts.latin1 ? new TextDecoder('latin1').decode(await res.arrayBuffer()) : res.text();
 }
-async function overpass(query) {
+async function overpass(query, { tries = 2, timeoutMs = 300000 } = {}) {
   let lastErr;
   for (const url of OVERPASS_URLS) {
-    for (let intent = 0; intent < 2; intent++) {
+    for (let intent = 0; intent < tries; intent++) {
       try {
-        return JSON.parse(await getText(url, { method: 'POST', body: new URLSearchParams({ data: query }) }));
+        const res = await fetch(url, { method: 'POST', body: new URLSearchParams({ data: query }), headers: UA, signal: AbortSignal.timeout(timeoutMs) });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
       } catch (e) { lastErr = e; console.warn(`Overpass (${url}): ${e.message}`); await sleep(5000); }
     }
   }
@@ -236,13 +238,18 @@ async function loadOsm(prev) {
 async function addLimits(radars) {
   const need = radars.filter((r) => !r.v && r.c !== 'FR');
   const CHUNK = 120;
+  // Pressupost de temps: si Overpass va lent, ens quedem amb el que hàgim trobat (el pròxim dia continua,
+  // perquè els límits trobats es reaprofiten). Sense això, el novembre de 2026 va bloquejar la web una hora.
+  const budgetMs = (+process.env.LIMITS_MINUTES || 20) * 60000;
+  const t0 = Date.now();
   let found = 0;
   for (let i = 0; i < need.length; i += CHUNK) {
+    if (Date.now() - t0 > budgetMs) { console.warn(`\n  límits: s'ha acabat el temps (${need.length - i} radars pendents per a la pròxima vegada)`); break; }
     const part = need.slice(i, i + CHUNK);
     const q = '[out:json][timeout:240];\n' + part.map((r) =>
       `way(around:30,${r.lat},${r.lon})[highway~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|motorway_link|trunk_link|primary_link)$"][maxspeed];make l rid="${r.id}",ms=set(t["maxspeed"]);out;`).join('\n');
     try {
-      const j = await overpass(q);
+      const j = await overpass(q, { tries: 1, timeoutMs: 150000 });
       const byId = new Map(part.map((r) => [r.id, r]));
       for (const e of j.elements || []) {
         const r = byId.get(e.tags && e.tags.rid);

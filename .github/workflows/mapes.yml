@@ -142,4 +142,4 @@ jobs:
       - name: Torna a publicar la web (perquè l'app vegi la llista nova)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run radars-pages.yml
+        run: gh workflow run radars-pages.yml -f radars=false
