@@ -1,1 +1,35 @@
-{"generated":null,"paquets":[]}
+{
+ "generated": "2026-11-11T10:37:39.545Z",
+ "paquets": [
+  {
+   "id": "es-catalunya",
+   "pais": "Espanya",
+   "nom": "Catalunya",
+   "bytes": 187848840,
+   "bounds": [
+    0.1564,
+    40.2124,
+    4.1748,
+    42.9243
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-catalunya.pmtiles"
+  },
+  {
+   "id": "ad-andorra",
+   "pais": "Andorra",
+   "nom": "Andorra",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/ad-andorra.pmtiles"
+  }
+ ]
+}
