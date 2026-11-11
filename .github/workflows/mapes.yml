@@ -64,19 +64,45 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      # Només les fonts comunes (mar, costes, llacs, Natural Earth). MAI el fitxer d'OSM de la regió:
+      # el novembre de 2026 la memòria cau guardava el d'Andorra i totes les regions van sortir amb Andorra.
       - name: Fonts comunes (mar, costes, Natural Earth) en memòria cau
         uses: actions/cache@v4
         with:
-          path: data/sources
-          key: planetiler-fonts-v1
+          path: |
+            data/sources
+            !data/sources/*.osm.pbf
+          key: planetiler-fonts-v2
+      - name: Descarrega l'extracte d'OSM de la regió
+        run: |
+          rm -f data/sources/*.osm.pbf
+          mkdir -p osm
+          curl -sfL -o "osm/${{ matrix.regio.id }}.osm.pbf" "https://download.geofabrik.de/${{ matrix.regio.pbf }}-latest.osm.pbf"
+          ls -la osm
       - name: Genera el paquet
         run: |
           curl -sL -o planetiler.jar "https://github.com/onthegomap/planetiler/releases/download/${PLANETILER}/planetiler.jar"
           mkdir -p out
           java -Xmx12g -jar planetiler.jar --download \
-            --osm-url="https://download.geofabrik.de/${{ matrix.regio.pbf }}-latest.osm.pbf" \
+            --osm-path="osm/${{ matrix.regio.id }}.osm.pbf" \
             --output="out/${{ matrix.regio.id }}.pmtiles" --maxzoom=14 --force
           ls -la out
+      - name: Comprova que el paquet és de la regió correcta
+        run: |
+          node -e '
+            const fs = require("fs");
+            const id = process.argv[1];
+            const b = Buffer.alloc(127); const fd = fs.openSync(`out/${id}.pmtiles`, "r"); fs.readSync(fd, b, 0, 127, 0);
+            const e7 = (o) => b.readInt32LE(o) / 1e7;
+            const [w, s, e, n] = [e7(102), e7(106), e7(110), e7(114)];
+            const cx = (w + e) / 2, cy = (s + n) / 2;
+            // Caixes aproximades per país (per detectar un paquet amb les dades d una altra regió)
+            const box = { es: [-18.5, 27.5, 4.5, 44], ad: [1.3, 42.3, 1.9, 42.8], pt: [-31.5, 32, -6, 42.2], fr: [-5.5, 41.3, 9.7, 51.2], it: [6.5, 35.4, 18.6, 47.2] }[id.slice(0, 2)];
+            const inBox = box && cx >= box[0] && cx <= box[2] && cy >= box[1] && cy <= box[3];
+            const andorra = Math.abs(cx - 1.6) < 0.2 && Math.abs(cy - 42.54) < 0.2;
+            console.log(id, "límits", [w, s, e, n].map(x => x.toFixed(3)).join(","));
+            if (!inBox || (andorra && id !== "ad-andorra")) { console.error("ERROR: el paquet no és de la regió " + id); process.exit(1); }
+          ' "${{ matrix.regio.id }}"
       - name: Puja'l a la Release
         env:
           GH_TOKEN: ${{ github.token }}
