@@ -1,20 +1,290 @@
 {
- "generated": "2026-11-11T10:37:39.545Z",
+ "generated": "2026-11-11T10:48:01.869Z",
  "paquets": [
+  {
+   "id": "es-andalusia",
+   "pais": "Espanya",
+   "nom": "Andalusia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-andalusia.pmtiles"
+  },
+  {
+   "id": "es-arago",
+   "pais": "Espanya",
+   "nom": "Aragó",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-arago.pmtiles"
+  },
+  {
+   "id": "es-asturies",
+   "pais": "Espanya",
+   "nom": "Astúries",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-asturies.pmtiles"
+  },
+  {
+   "id": "es-canaries",
+   "pais": "Espanya",
+   "nom": "Canàries",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-canaries.pmtiles"
+  },
+  {
+   "id": "es-cantabria",
+   "pais": "Espanya",
+   "nom": "Cantàbria",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-cantabria.pmtiles"
+  },
+  {
+   "id": "es-castella-la-manxa",
+   "pais": "Espanya",
+   "nom": "Castella-la Manxa",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-castella-la-manxa.pmtiles"
+  },
+  {
+   "id": "es-castella-i-lleo",
+   "pais": "Espanya",
+   "nom": "Castella i Lleó",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-castella-i-lleo.pmtiles"
+  },
   {
    "id": "es-catalunya",
    "pais": "Espanya",
    "nom": "Catalunya",
-   "bytes": 187848840,
+   "bytes": 3193848,
    "bounds": [
-    0.1564,
-    40.2124,
-    4.1748,
-    42.9243
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
    ],
    "maxzoom": 14,
    "data": "2026-11-11",
    "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-catalunya.pmtiles"
+  },
+  {
+   "id": "es-ceuta",
+   "pais": "Espanya",
+   "nom": "Ceuta",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-ceuta.pmtiles"
+  },
+  {
+   "id": "es-extremadura",
+   "pais": "Espanya",
+   "nom": "Extremadura",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-extremadura.pmtiles"
+  },
+  {
+   "id": "es-galicia",
+   "pais": "Espanya",
+   "nom": "Galícia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-galicia.pmtiles"
+  },
+  {
+   "id": "es-illes-balears",
+   "pais": "Espanya",
+   "nom": "Illes Balears",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-illes-balears.pmtiles"
+  },
+  {
+   "id": "es-la-rioja",
+   "pais": "Espanya",
+   "nom": "La Rioja",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-la-rioja.pmtiles"
+  },
+  {
+   "id": "es-madrid",
+   "pais": "Espanya",
+   "nom": "Madrid",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-madrid.pmtiles"
+  },
+  {
+   "id": "es-melilla",
+   "pais": "Espanya",
+   "nom": "Melilla",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-melilla.pmtiles"
+  },
+  {
+   "id": "es-murcia",
+   "pais": "Espanya",
+   "nom": "Múrcia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-murcia.pmtiles"
+  },
+  {
+   "id": "es-navarra",
+   "pais": "Espanya",
+   "nom": "Navarra",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-navarra.pmtiles"
+  },
+  {
+   "id": "es-pais-basc",
+   "pais": "Espanya",
+   "nom": "País Basc",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-pais-basc.pmtiles"
+  },
+  {
+   "id": "es-pais-valencia",
+   "pais": "Espanya",
+   "nom": "País Valencià",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/es-pais-valencia.pmtiles"
   },
   {
    "id": "ad-andorra",
@@ -30,6 +300,426 @@
    "maxzoom": 14,
    "data": "2026-11-11",
    "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/ad-andorra.pmtiles"
+  },
+  {
+   "id": "pt-portugal",
+   "pais": "Portugal",
+   "nom": "Portugal",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/pt-portugal.pmtiles"
+  },
+  {
+   "id": "fr-alsacia",
+   "pais": "França",
+   "nom": "Alsàcia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-alsacia.pmtiles"
+  },
+  {
+   "id": "fr-aquitania",
+   "pais": "França",
+   "nom": "Aquitània",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-aquitania.pmtiles"
+  },
+  {
+   "id": "fr-alvernia",
+   "pais": "França",
+   "nom": "Alvèrnia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-alvernia.pmtiles"
+  },
+  {
+   "id": "fr-baixa-normandia",
+   "pais": "França",
+   "nom": "Baixa Normandia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-baixa-normandia.pmtiles"
+  },
+  {
+   "id": "fr-borgonya",
+   "pais": "França",
+   "nom": "Borgonya",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-borgonya.pmtiles"
+  },
+  {
+   "id": "fr-bretanya",
+   "pais": "França",
+   "nom": "Bretanya",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-bretanya.pmtiles"
+  },
+  {
+   "id": "fr-centre",
+   "pais": "França",
+   "nom": "Centre",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-centre.pmtiles"
+  },
+  {
+   "id": "fr-xampanya",
+   "pais": "França",
+   "nom": "Xampanya-Ardenes",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-xampanya.pmtiles"
+  },
+  {
+   "id": "fr-corsega",
+   "pais": "França",
+   "nom": "Còrsega",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-corsega.pmtiles"
+  },
+  {
+   "id": "fr-franc-comtat",
+   "pais": "França",
+   "nom": "Franc Comtat",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-franc-comtat.pmtiles"
+  },
+  {
+   "id": "fr-alta-normandia",
+   "pais": "França",
+   "nom": "Alta Normandia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-alta-normandia.pmtiles"
+  },
+  {
+   "id": "fr-illa-de-franca",
+   "pais": "França",
+   "nom": "Illa de França (París)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-illa-de-franca.pmtiles"
+  },
+  {
+   "id": "fr-llenguadoc-rossello",
+   "pais": "França",
+   "nom": "Llenguadoc-Rosselló (Catalunya Nord)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-llenguadoc-rossello.pmtiles"
+  },
+  {
+   "id": "fr-llemosi",
+   "pais": "França",
+   "nom": "Llemosí",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-llemosi.pmtiles"
+  },
+  {
+   "id": "fr-lorena",
+   "pais": "França",
+   "nom": "Lorena",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-lorena.pmtiles"
+  },
+  {
+   "id": "fr-migdia-pirineus",
+   "pais": "França",
+   "nom": "Migdia-Pirineus",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-migdia-pirineus.pmtiles"
+  },
+  {
+   "id": "fr-nord-pas-de-calais",
+   "pais": "França",
+   "nom": "Nord-Pas de Calais",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-nord-pas-de-calais.pmtiles"
+  },
+  {
+   "id": "fr-pais-del-loira",
+   "pais": "França",
+   "nom": "País del Loira",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-pais-del-loira.pmtiles"
+  },
+  {
+   "id": "fr-picardia",
+   "pais": "França",
+   "nom": "Picardia",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-picardia.pmtiles"
+  },
+  {
+   "id": "fr-poitou",
+   "pais": "França",
+   "nom": "Poitou-Charentes",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-poitou.pmtiles"
+  },
+  {
+   "id": "fr-provenca",
+   "pais": "França",
+   "nom": "Provença-Alps-Costa Blava",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-provenca.pmtiles"
+  },
+  {
+   "id": "fr-roine-alps",
+   "pais": "França",
+   "nom": "Roine-Alps",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/fr-roine-alps.pmtiles"
+  },
+  {
+   "id": "it-nord-oest",
+   "pais": "Itàlia",
+   "nom": "Nord-oest (Milà, Torí, Gènova)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/it-nord-oest.pmtiles"
+  },
+  {
+   "id": "it-nord-est",
+   "pais": "Itàlia",
+   "nom": "Nord-est (Venècia, Bolonya)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/it-nord-est.pmtiles"
+  },
+  {
+   "id": "it-centre",
+   "pais": "Itàlia",
+   "nom": "Centre (Roma, Florència)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/it-centre.pmtiles"
+  },
+  {
+   "id": "it-sud",
+   "pais": "Itàlia",
+   "nom": "Sud (Nàpols)",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/it-sud.pmtiles"
+  },
+  {
+   "id": "it-illes",
+   "pais": "Itàlia",
+   "nom": "Sicília i Sardenya",
+   "bytes": 3193848,
+   "bounds": [
+    1.4124,
+    42.4276,
+    1.7875,
+    42.6572
+   ],
+   "maxzoom": 14,
+   "data": "2026-11-11",
+   "url": "https://github.com/Xorigu3r/xoriguer-radars/releases/download/mapes/it-illes.pmtiles"
   }
  ]
 }
