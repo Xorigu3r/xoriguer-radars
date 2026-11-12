@@ -480,7 +480,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
 
   // ---------- versió nova ----------
   // L'app no és a Google Play: un cop al dia mira a GitHub si hi ha una Release més nova (etiqueta vX.Y).
-  const APP_VERSION = '1.3';
+  const APP_VERSION = '1.4';
   const RELEASES = 'https://api.github.com/repos/Xorigu3r/xoriguer-radars/releases?per_page=15';
   async function checkNewVersion(manual = false) {
     if (!isNative && !manual) return;   // la web s'actualitza sola
