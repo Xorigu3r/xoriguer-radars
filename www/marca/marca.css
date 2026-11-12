@@ -1,0 +1,32 @@
+/* Marca Xoriguer per a les apps web (norma de la casa, 12/11/2026)
+ * Original: Documents/LOGOS-XORIGUER/_eines/web/marca.css — a cada projecte n'hi ha una còpia a marca/.
+ * No l'editis a la còpia: canvia l'original i torna a copiar-lo (python _eines/web/copia_marca.py).
+ *
+ *   Títols: Montserrat ExtraBold      Text: Segoe UI (a Android/Mac surt Roboto/sistema: no es pot incloure)
+ *   Rètol XORIGUER amb la X original:
+ *     <span class="xm-mot"><svg class="xm-x" ...>(vegeu marca-x.svg.txt)</svg><i class="xm-resta">ORIGUER</i></span>
+ *     <span class="xm-sub">APARCAMENT</span>
+ * S'ha d'enllaçar DESPRÉS dels estils del projecte perquè guanyi el tipus de lletra del body.
+ */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('Montserrat-ExtraBold.ttf') format('truetype');
+}
+:root {
+  --xm-titol: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+  --xm-text: 'Segoe UI', 'Segoe UI Variable', Roboto, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --xm-crema: #F6EFE2;
+  --xm-taronja: #FFA82E;
+}
+body { font-family: var(--xm-text); }
+button, input, select, textarea { font-family: inherit; }
+h1, h2, h3, .xm-titol { font-family: var(--xm-titol); font-weight: 800; }
+
+/* Rètol: X vectorial del logo + resta en Montserrat ExtraBold inclinada com la X */
+.xm-mot { font-family: var(--xm-titol); font-weight: 800; font-style: normal; white-space: nowrap; line-height: 1; letter-spacing: 0; }
+.xm-x { display: inline-block; height: .795em; width: 1.258em; margin-right: -.167em; vertical-align: baseline; overflow: visible; }
+.xm-resta, .xm-cursiva { display: inline-block; font-style: normal; transform: skewX(-11.9deg); transform-origin: 0 100%; }
+.xm-sub { font-family: var(--xm-text); font-weight: 600; font-style: normal; text-transform: uppercase; letter-spacing: .32em; color: var(--xm-taronja); }
