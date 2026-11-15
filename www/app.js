@@ -483,6 +483,8 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
   const APP_VERSION = '1.4.1';
   const URL_VERSIO = 'https://xoriguer.dev/versions/radars/versio.json';
   async function checkNewVersion(manual = false) {
+    // app d'Android: s'actualitza sense reinstal·lar (xoriguer-actualitza.js)
+    if (window.XActualitza?.natiu) { await window.XActualitza.comprova(manual, (s) => { if (manual) $('#verInfo').textContent = s; }); return; }
     if (!isNative && !manual) return;   // la web s'actualitza sola
     const last = +(lsGet('versionChecked') || 0);
     if (!manual && Date.now() - last < DAY) { showNewVersion(JSON.parse(lsGet('versionNew') || 'null')); return; }
@@ -1085,6 +1087,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
   bindSettings();
   document.body.classList.toggle('no-speed', !settings.showSpeed);
   loadRadars().then(() => { if (settings.map) setMap(true); });
+  window.XActualitza?.inicia({ app: 'radars', versio: APP_VERSION });
   checkNewVersion();
   showNext(null, null);
 

@@ -10,6 +10,7 @@ public class MainActivity extends BridgeActivity {
         // Connectors propis; s'han de registrar abans de super.onCreate.
         registerPlugin(VeuRadarPlugin.class);   // veu amb sortida de so triable
         registerPlugin(MapesPlugin.class);      // paquets de mapa (.pmtiles) al mòbil
+        registerPlugin(XoriguerActualitza.class);   // actualitzacions sense reinstal·lar
         super.onCreate(savedInstanceState);
     }
 }
