@@ -1,7 +1,8 @@
 # Compila l'APK de debug amb el JDK i l'SDK de ~/android-tools (no cal tenir-los al PATH).
 $ErrorActionPreference = 'Stop'
 $tools = Join-Path $HOME 'android-tools'
-if (-not $env:JAVA_HOME) { $env:JAVA_HOME = Join-Path $tools 'jdk' }
+# Capacitor 8 demana JDK 21: el de ~/android-tools (el JAVA_HOME del sistema és 17)
+$env:JAVA_HOME = Join-Path $tools 'jdk'
 if (-not $env:ANDROID_HOME) { $env:ANDROID_HOME = Join-Path $tools 'sdk' }
 $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
 

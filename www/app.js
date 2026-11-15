@@ -288,8 +288,8 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
   }
 
   // ---------- dades ----------
-  // Còpia publicada a GitHub Pages: el workflow la regenera cada dia.
-  const REMOTE_RADARS = 'https://xorigu3r.github.io/xoriguer-radars/radars.json';
+  // Còpia publicada a xoriguer.dev (abans GitHub Pages, suspès el 14/11/2026).
+  const REMOTE_RADARS = 'https://xoriguer.dev/xoriguer-radars/radars.json';
   const DAY = 24 * 3600 * 1000;
   let currentData = null;
   const lsGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
@@ -479,20 +479,18 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
   }
 
   // ---------- versió nova ----------
-  // L'app no és a Google Play: un cop al dia mira a GitHub si hi ha una Release més nova (etiqueta vX.Y).
-  const APP_VERSION = '1.4';
-  const RELEASES = 'https://api.github.com/repos/Xorigu3r/xoriguer-radars/releases?per_page=15';
+  // L'app no és a Google Play: un cop al dia mira https://xoriguer.dev/versions/radars/versio.json ({versio, apk}).
+  const APP_VERSION = '1.4.1';
+  const URL_VERSIO = 'https://xoriguer.dev/versions/radars/versio.json';
   async function checkNewVersion(manual = false) {
     if (!isNative && !manual) return;   // la web s'actualitza sola
     const last = +(lsGet('versionChecked') || 0);
     if (!manual && Date.now() - last < DAY) { showNewVersion(JSON.parse(lsGet('versionNew') || 'null')); return; }
     try {
-      const rels = await (await fetch(RELEASES, { headers: { Accept: 'application/vnd.github+json' } })).json();
+      const v = await (await fetch(URL_VERSIO, { cache: 'no-store' })).json();
       lsSet('versionChecked', String(Date.now()));
-      const rel = rels.filter((r) => /^v\d+(\.\d+)*$/.test(r.tag_name) && !r.draft && !r.prerelease)
-        .sort((a, b) => compareVersions(b.tag_name, a.tag_name))[0];
-      const apk = rel && rel.assets.find((a) => /\.apk$/i.test(a.name));
-      const info = rel && apk && compareVersions(rel.tag_name, APP_VERSION) > 0 ? { tag: rel.tag_name, url: apk.browser_download_url } : null;
+      const tag = v && v.versio ? 'v' + String(v.versio).replace(/^v/, '') : null;
+      const info = tag && v.apk && compareVersions(tag, APP_VERSION) > 0 ? { tag, url: v.apk } : null;
       lsSet('versionNew', JSON.stringify(info));
       showNewVersion(info);
       if (manual) $('#verInfo').textContent = info ? `Hi ha la versió ${info.tag}.` : `Tens la versió més nova (v${APP_VERSION}).`;
@@ -551,7 +549,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (() => {
     }
   }
   // ---------- paquets de mapa per regions (només app) ----------
-  const MAPES_URL = 'https://xorigu3r.github.io/xoriguer-radars/mapes.json';
+  const MAPES_URL = 'https://xoriguer.dev/xoriguer-radars/mapes.json';
   const Mapes = isNative ? Cap.registerPlugin('Mapes') : null;
   let manifest = { paquets: [] };
   let pkgBusy = null;   // fitxer que s'està baixant
