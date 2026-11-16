@@ -1,6 +1,6 @@
 {
   "appId": "cat.xoriguer.radars",
-  "appName": "Xoriguer Radars",
+  "appName": "Radars",
   "webDir": "www",
   "android": {
     "useLegacyBridge": true
